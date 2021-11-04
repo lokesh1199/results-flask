@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
 
 from check import checkRoll
+from marks import getMarks
 
 app = Flask(__name__)
 
@@ -16,7 +17,9 @@ def marks():
     if not checkRoll(roll):
         return redirect('error')
 
-    return render_template('marks.html', roll=roll)
+    marksSheet = getMarks(roll)
+
+    return render_template('marks.html', marksSheet=marksSheet)
 
 
 @app.route('/error')

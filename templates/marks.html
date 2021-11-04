@@ -5,8 +5,26 @@ Marks
 {% endblock title %}
 
 {% block content %}
-<section class="section has-text-centered">
-    <div class="title">Marks</div>
-    <div class="subtitle">{{ roll }}</div>
+<section class="section">
+    <div class="table-container">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    {% for i in range(1, marksSheet.max_column) %}
+                    <th> {{ marksSheet.cell(2, i).value }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(3, marksSheet.max_row) %}
+                <tr>
+                    {% for j in range(1, marksSheet.max_column) %}
+                    <td>{{ marksSheet.cell(i, j).value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </section>
 {% endblock content %}
