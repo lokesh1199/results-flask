@@ -11,11 +11,7 @@
   <link rel="stylesheet" href="static/css/bulma.min.css" />
   <link rel="icon" href="static/images/favicon.png">
   <style>
-    .my-card {
-      max-width: 496px;
-      max-height: 400px;
-      min-width: 375px;
-      min-height: 376px;
+    .center {
       margin: 0 auto;
     }
 
@@ -32,7 +28,7 @@
         <img src="static/images/logo.png" alt="logo" height="256" width="256"></a>
     </div>
   </div>
-  <div class="container pt-6">
+  <div class="container pt-6 px-0-mobile mx-0-mobile">
     {% block content %} {% endblock content %}
   </div>
 </body>
