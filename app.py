@@ -16,7 +16,7 @@ def marks():
     if not checkRoll(roll):
         return redirect('error')
 
-    return f'<h1>{roll}</h1>'
+    return render_template('marks.html', roll=roll)
 
 
 @app.route('/error')
