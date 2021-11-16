@@ -17,6 +17,15 @@ def getSubjectName(con, subjectCode):
     return cur.fetchone()[0]
 
 
+def getCGPA(creditsList, grades):
+    res = 0
+    print(grades)
+    for i in range(len(creditsList)):
+        res += creditsList[i] * grades[i]
+
+    return round(res/sum(creditsList), 2)
+
+
 def getMarks(con, rollno):
     cur = con.cursor()
     SQL = f'''SELECT
@@ -27,15 +36,40 @@ def getMarks(con, rollno):
         credits,
         grade,
         grade_points,
-        max_marks,
-        max_credits,
         reg_or_sup FROM marks WHERE rollno="{rollno}"'''
 
     index = 1
+    totalMarks = 0
+    totalCredits = 0
+
+    output = []
+    creditsList = []
+    gradePoints = []
     for row in cur.execute(SQL):
-        res = [index]
-        res.append(row[0])
-        res.append(getSubjectName(con, row[0]))
-        res.extend(row[1:])
-        yield res
+        res = [
+            index,
+            row[0],
+            getSubjectName(con, row[0]),
+            *row[1:3],
+            row[1] + row[2],
+            *row[3:],
+        ]
+        creditsList.append(row[4])
+        gradePoints.append(row[6])
+        output.append(res)
+        totalMarks += row[1] + row[2]
+        totalCredits += row[4]
         index += 1
+
+    maxMarksSQL = f'SELECT max_marks FROM marks WHERE rollno="{rollno}"'
+    maxMarks = cur.execute(maxMarksSQL).fetchone()[0]
+
+    res = {
+        'maxMarks': maxMarks,
+        'totalMarks': totalMarks,
+        'totalCredits': totalCredits,
+        'cgpa': getCGPA(creditsList, gradePoints)
+    }
+    output.append(res)
+
+    return output

@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect
+import sqlite3
+
+from flask import Flask, redirect, render_template, request
 
 from check import checkRoll
 from marks import getMarks, getName
-import sqlite3
 
 app = Flask(__name__)
 

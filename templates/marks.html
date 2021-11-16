@@ -27,17 +27,16 @@ Marks
                     <th>Subject Name</th>
                     <th>Internal</th>
                     <th>External</th>
+                    <th>Total</th>
                     <th>Pass/Fail</th>
                     <th>Credits</th>
                     <th>Grade</th>
                     <th>Grade Points</th>
-                    <th>Max Marks</th>
-                    <th>Max Credits</th>
                     <th>Reg/Sup</th>
                 </tr>
             </thead>
             <tbody>
-                {% for row in marks %}
+                {% for row in marks[:-1] %}
                 <tr>
                     {% for col in row %}
                     <td>{{ col }}</td>
@@ -45,6 +44,24 @@ Marks
                 </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="9">Max Marks</th>
+                    <td colspan="2">{{ marks[-1]['maxMarks']}}</td>
+                </tr>
+                <tr>
+                    <th colspan="9">Total Marks</th>
+                    <td colspan="2">{{ marks[-1]['totalMarks']}}</td>
+                </tr>
+                <tr>
+                    <th colspan="9">Total Credits</th>
+                    <td colspan="2">{{ marks[-1]['totalCredits']}}</td>
+                </tr>
+                <tr>
+                    <th colspan="9">CGPA</th>
+                    <td colspan="2">{{ marks[-1]['cgpa']}}</td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </section>
