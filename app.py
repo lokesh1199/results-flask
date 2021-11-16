@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect
 
 from check import checkRoll
-from marks import getMarks
+from marks import getMarks, getName
+import sqlite3
 
 app = Flask(__name__)
 
@@ -13,13 +14,15 @@ def home():
 
 @app.route('/marks')
 def marks():
-    roll = request.args.get('roll')
-    if not checkRoll(roll):
+    rollno = request.args.get('roll')
+    if not checkRoll(rollno):
         return redirect('error')
 
-    marksSheet = getMarks(roll)
+    con = sqlite3.connect('marks.db')
 
-    return render_template('marks.html', marksSheet=marksSheet)
+    marks = getMarks(con, rollno)
+    name = getName(con, rollno)
+    return render_template('marks.html', marks=marks, name=name, rollno=rollno)
 
 
 @app.route('/error')

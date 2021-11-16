@@ -8,18 +8,39 @@ Marks
 <section class="section">
     <div class="table-container">
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <tr>
+                <th>Name</th>
+                <td>{{ name }}</td>
+            </tr>
+            <tr>
+                <th>Roll No</th>
+                <td>{{ rollno }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="table-container">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
             <thead>
                 <tr>
-                    {% for i in range(1, marksSheet.max_column) %}
-                    <th> {{ marksSheet.cell(2, i).value }}</th>
-                    {% endfor %}
+                    <th>S.No</th>
+                    <th>Subject Code</th>
+                    <th>Subject Name</th>
+                    <th>Internal</th>
+                    <th>External</th>
+                    <th>Pass/Fail</th>
+                    <th>Credits</th>
+                    <th>Grade</th>
+                    <th>Grade Points</th>
+                    <th>Max Marks</th>
+                    <th>Max Credits</th>
+                    <th>Reg/Sup</th>
                 </tr>
             </thead>
             <tbody>
-                {% for i in range(3, marksSheet.max_row) %}
+                {% for row in marks %}
                 <tr>
-                    {% for j in range(1, marksSheet.max_column) %}
-                    <td>{{ marksSheet.cell(i, j).value }}</td>
+                    {% for col in row %}
+                    <td>{{ col }}</td>
                     {% endfor %}
                 </tr>
                 {% endfor %}
