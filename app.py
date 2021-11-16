@@ -15,14 +15,18 @@ def home():
 @app.route('/marks')
 def marks():
     rollno = request.args.get('roll')
+    rollno = rollno.upper()
     if not checkRoll(rollno):
         return redirect('error')
 
     con = sqlite3.connect('marks.db')
 
-    marks = getMarks(con, rollno)
-    name = getName(con, rollno)
-    return render_template('marks.html', marks=marks, name=name, rollno=rollno)
+    try:
+        marks = getMarks(con, rollno)
+        name = getName(con, rollno)
+        return render_template('marks.html', marks=marks, name=name, rollno=rollno)
+    except:
+        return redirect('error')
 
 
 @app.route('/error')
