@@ -1,29 +1,54 @@
-{% extends 'layout.html' %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block title %}
-Home
-{% endblock title %}
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    {% block title %} {% endblock title %}
+  </title>
+  <link rel="stylesheet" href="static/css/bulma.min.css" />
+  <link rel="icon" href="static/images/favicon.png">
+  <style>
+    .center {
+      margin: 0 auto;
+    }
 
+    .color {
+      background-color: #1E2944;
+    }
+  </style>
+</head>
 
-{% block content %}
-<div class="columns is-centered">
-  <div class="column is-4-desktop is-6-tablet is-10-mobile center">
-    <div class="card px-6 py-6">
-      <div class="card-content">
-        <form action="{{ url_for('marks') }}" class="form">
-          <div class="field">
-            <label for="roll" class="label">Roll No: </label>
-            <div class="control">
-              <input type="text" id="roll" name="roll" class="input is-dark" required>
-            </div>
-          </div>
-      </div>
-      <div class="pt-5 has-text-right">
-        <input type="submit" class="button has-text-light color">
-      </div>
-      </form>
+<body>
+  <div class="navbar has-shadow">
+    <div class="navbar-brand">
+      <a href="{{ url_for('home') }} ">
+        <img src="static/images/logo.png" alt="logo" height="256" width="256"></a>
     </div>
   </div>
-</div>
-</div>
-{% endblock content %}
+  <div class="container pt-6 px-0-mobile mx-0-mobile">
+    <div class="columns is-centered">
+      <div class="column is-4-desktop is-6-tablet is-10-mobile center">
+        <div class="card px-6 py-6">
+          <div class="card-content">
+            <form action="{{ url_for('marks') }}" class="form">
+              <div class="field">
+                <label for="roll" class="label">Roll No: </label>
+                <div class="control">
+                  <input type="text" id="roll" name="roll" class="input is-dark" required>
+                </div>
+              </div>
+          </div>
+          <div class="pt-5 has-text-right">
+            <input type="submit" class="button has-text-light color">
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</body>
