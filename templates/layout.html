@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>
-    {% block title %} {% endblock title %}
+    S V Colleges - {% block title %} {% endblock title %}
   </title>
   <link rel="stylesheet" href="static/css/bulma.min.css" />
   <link rel="icon" href="static/images/favicon.png">
@@ -17,6 +17,13 @@
 
     .color {
       background-color: #1E2944;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0px;
+      width: 100%;
+      box-shadow: black;
     }
   </style>
 </head>
@@ -31,6 +38,13 @@
   <div class="container pt-6 px-0-mobile mx-0-mobile">
     {% block content %} {% endblock content %}
   </div>
+  <footer class="py-5">
+    <div class=" content has-text-centered">
+      <p>
+        Made by <strong>Lokesh</strong> and <strong>Akhilesh</strong>
+      </p>
+    </div>
+  </footer>
 </body>
 
 </html>
