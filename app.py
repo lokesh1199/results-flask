@@ -16,7 +16,7 @@ def home():
 @app.route('/marks')
 def marks():
     rollno = request.args.get('roll')
-    rollno = rollno.upper()
+    rollno = rollno.upper().strip()
     if not checkRoll(rollno):
         return redirect('error')
 
