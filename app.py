@@ -11,7 +11,7 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/home')
 def home():
-    con = sqlite3.connect('marks.db')
+    con = sqlite3.connect('results.db')
     resultsList = getResultsList(con)
     return render_template('home.html', resultsList=resultsList)
 
@@ -29,7 +29,7 @@ def results():
     if not checkRoll(rollno):
         return redirect('error')
 
-    con = sqlite3.connect('marks.db')
+    con = sqlite3.connect('results.db')
 
     try:
         tableName = getTableName(tableSno, con)
@@ -37,7 +37,7 @@ def results():
         marks = getMarks(con, rollno, tableName)
         name = getName(con, rollno, tableName)
 
-        return render_template('marks.html', marks=marks, name=name, rollno=rollno, examName=examName)
+        return render_template('results.html', marks=marks, name=name, rollno=rollno, examName=examName)
     except Exception as e:
         return redirect('error')
 

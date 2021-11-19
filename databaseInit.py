@@ -147,23 +147,30 @@ def insertResultsData(data: list, tableName, con):
         index = j+2
 
 
-def main():
-    con = sqlite3.connect('marks.db')
+def createAllTables():
+    con = sqlite3.connect('results.db')
 
-    tableName = 't_1_1_r20_regular_august_2022'
+    createStudentTable(con)
+    createSubjectTable(con)
+    createMetadataTable(con)
+
+
+# TODO Remove this in production
+def main():
+    con = sqlite3.connect('results.db')
+    # createAllTables()
+
+    tableName = 't_1_1_r20_regular_august_2020'
     createResultsTable(tableName, con)
-    # createStudentTable(con)
-    # createSubjectTable(con)
-    # createMetadataTable(con)
     insertResultsData(parseCSV('marks/marks.csv'), tableName, con)
 
     # sql = f'SELECT * FROM {tableName} WHERE rollno="20BF1A3311"'
     # print(sql)
     # sql = 'SELECT tbl_name FROM sqlite_master'
-    sql = f'''SELECT * FROM metadata ORDER BY sno DESC LIMIT 10'''
-    cur = con.cursor()
-    for row in cur.execute(sql):
-        print(row)
+    # sql = f'''SELECT * FROM metadata ORDER BY sno DESC LIMIT 10'''
+    # cur = con.cursor()
+    # for row in cur.execute(sql):
+    # print(row)
 
 
 if __name__ == '__main__':
