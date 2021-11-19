@@ -1,11 +1,12 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-Marks
+Results
 {% endblock title %}
 
 {% block content %}
 <section class="section">
+    <p class="subtitle has-text-centered mb-6 is-underlined py-3 is-bold">{{ examName }}</p>
     <div class="table-container">
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
             <tr>
@@ -32,7 +33,6 @@ Marks
                     <th>Credits</th>
                     <th>Grade</th>
                     <th>Grade Points</th>
-                    <th>Reg/Sup</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,7 +59,7 @@ Marks
                 </tr>
                 <tr>
                     <th colspan="2">SGPA</th>
-                    <td colspan="9">{{ marks[-1]['cgpa']}}</td>
+                    <td colspan="9">{{ marks[-1]['sgpa']}}</td>
                 </tr>
             </tfoot>
         </table>

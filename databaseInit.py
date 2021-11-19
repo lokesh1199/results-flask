@@ -1,100 +1,169 @@
 import sqlite3
-
-
-def createStudentsTable(con):
-    cur = con.cursor()
-    createSQL = '''CREATE TABLE students (
-        rollno text,
-        name text
-    )'''
-
-    cur.execute(createSQL)
-    con.commit()
+from datetime import datetime
 
 
 def parseCSV(filename):
     with open(filename) as file:
-        for line in file.readlines()[1:]:
-            yield list(map(str.strip, line.split(',')))
+        res = []
+        for line in file:
+            res.append(list(map(str.strip, line.split(','))))
+        return res
 
 
-def insertStudentsValues(con, filename):
+def countSubjects(data: list):
+    index = 10
+    while index < len(data):
+        if data[index][0] == 'SGPA':
+            return index - 10
+        index += 1
+    return index - 10
+
+
+def stripEmptyCells(row: list):
+    return [i for i in row if i]
+
+
+def createResultsTable(tableName, con):
     cur = con.cursor()
-    insertSQL = 'INSERT INTO students values("{}", "{}")'
-
-    for row in parseCSV(filename):
-        cur.execute(insertSQL.format(*row))
-
-    con.commit()
-
-
-def createSubjectsTable(con):
-    cur = con.cursor()
-
-    createSQL = '''CREATE TABLE subjects (
-        subject_code text,
-        subject_name text
-    )'''
-
-    cur.execute(createSQL)
-    con.commit()
-
-
-def insertSubjectsValues(con, filename):
-    cur = con.cursor()
-    insertSQL = 'INSERT INTO subjects values("{}", "{}")'
-
-    for row in parseCSV(filename):
-        cur.execute(insertSQL.format(*row))
-
-    con.commit()
-
-
-def createMarksTable(con):
-    cur = con.cursor()
-    createSQL = '''CREATE TABLE marks (
+    createSQL = f'''CREATE TABLE {tableName} (
+        rollno text,
         subject_code text,
         internal integer,
         external integer,
-        pass_or_fail text,
+        total integer,
+        result_status text,
         credits integer,
-        grade text,
-        grade_points integer,
-        rollno text,
-        max_marks integer,
-        max_credits integer,
-        reg_or_sup text
+        grades text,
+        grade_points integer
     )'''
-
     cur.execute(createSQL)
     con.commit()
 
 
-def insertMarksValues(con, filename):
-    cur = con.cursor()
-    insertSQL = '''INSERT INTO marks VALUES (
-        "{}", "{}", "{}", "{}", "{}", "{}",
-        "{}", "{}", "{}", "{}", "{}"
+def insertResultsValues(data, tableName, con):
+    insertSQL = f'''INSERT INTO {tableName} values {tuple(data)}'''
+
+    cur = con.execute(insertSQL)
+    con.commit()
+
+
+def createStudentTable(con):
+    createSQL = '''CREATE TABLE students (
+        rollno text PRIMARY KEY,
+        name text
     )'''
 
-    for row in parseCSV(filename):
-        cur.execute(insertSQL.format(*row))
-
+    cur = con.cursor()
+    cur.execute(createSQL)
     con.commit()
+
+
+def insertStudentValues(rollno, name, con):
+    insertSQL = f'INSERT INTO students values ("{rollno}", "{name}")'
+
+    cur = con.cursor()
+    try:
+        cur.execute(insertSQL)
+        con.commit()
+    except:
+        # Already exists
+        pass
+
+
+def createSubjectTable(con):
+    createSQL = '''CREATE TABLE subjects (
+        subject_code text PRIMARY KEY,
+        subject_name text
+    )'''
+
+    cur = con.cursor()
+    cur.execute(createSQL)
+    con.commit()
+
+
+def insertSubjectValues(subjectCode, subjectName, con):
+    insertSQL = f'INSERT INTO subjects VALUES ("{subjectCode}", "{subjectName}")'
+
+    cur = con.cursor()
+    try:
+        cur.execute(insertSQL)
+        con.commit()
+    except:
+        # Already exists
+        pass
+
+
+def addSubjects(data: list, subjectCount, con):
+    for i in range(10, 10 + countSubjects(data)):
+        insertSubjectValues(*data[i][:2], con)
+
+
+def createMetadataTable(con):
+    createSQL = '''CREATE TABLE metadata (
+        sno integer,
+        date text,
+        name text
+    )'''
+    cur = con.cursor()
+    cur.execute(createSQL)
+    con.commit()
+
+
+def insertMetadataValues(tableName, con):
+    cur = con.cursor()
+    countSQL = 'SELECT sno FROM metadata ORDER BY sno DESC LIMIT 1'
+    cur.execute(countSQL)
+    count = cur.fetchone()
+    count = count[0] + 1 if count else 1
+
+    date = datetime.now().strftime(r'%d-%m-%Y')
+    insertSQL = f'INSERT INTO metadata VALUES ("{count}", "{date}", "{tableName}")'
+    cur = con.cursor()
+    cur.execute(insertSQL)
+    con.commit()
+
+
+def insertResultsData(data: list, tableName, con):
+    count = 0
+    subjectCount = countSubjects(data)
+
+    insertMetadataValues(tableName, con)
+    addSubjects(data, subjectCount, con)
+
+    index = 8
+    while index < len(data):
+        row = stripEmptyCells(data[index])
+        name, rollno = row[1], row[3]
+
+        insertStudentValues(rollno, name, con)
+
+        j = index + 2
+        while j <= index + subjectCount + 1:
+            row = data[j][:9]
+            row = [rollno] + row[:1] + row[2:]
+            insertResultsValues(row, tableName, con)
+            j += 1
+
+        index = j+2
 
 
 def main():
     con = sqlite3.connect('marks.db')
+
+    tableName = 't_1_1_r20_regular_august_2022'
+    createResultsTable(tableName, con)
+    # createStudentTable(con)
+    # createSubjectTable(con)
+    # createMetadataTable(con)
+    insertResultsData(parseCSV('marks/marks.csv'), tableName, con)
+
+    # sql = f'SELECT * FROM {tableName} WHERE rollno="20BF1A3311"'
+    # print(sql)
+    # sql = 'SELECT tbl_name FROM sqlite_master'
+    sql = f'''SELECT * FROM metadata ORDER BY sno DESC LIMIT 10'''
     cur = con.cursor()
-
-    createStudentsTable(con)
-    insertStudentsValues(con, 'static/marks/student18-3.csv')
-
-    createSubjectsTable(con)
-    insertSubjectsValues(con, 'static/marks/subject1.csv')
-
-    createMarksTable(con)
-    insertMarksValues(con, 'static/marks/marks1.csv')
+    for row in cur.execute(sql):
+        print(row)
 
 
 if __name__ == '__main__':

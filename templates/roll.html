@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    S V Colleges - Home
+  </title>
+  <link rel="stylesheet" href="/static/css/bulma.min.css" />
+  <link rel="icon" href="/static/images/favicon.png">
+  <style>
+    .center {
+      margin: 0 auto;
+    }
+
+    .color {
+      background-color: #1E2944;
+    }
+
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+    }
+
+    body {
+      background-image: url('/static/images/caps.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+
+    .card {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 35px;
+    }
+
+
+    .navbar {
+      background-color: rgba(30, 41, 68, 0.5);
+    }
+
+    footer {
+      background-color: rgba(30, 41, 68, 0.5);
+      position: absolute;
+      bottom: 0px;
+      width: 100%;
+    }
+
+    strong {
+      color: white;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navbar">
+    <div class="navbar-brand">
+      <a href="{{ url_for('home') }} ">
+        <img src="/static/images/svcelogolight.png" alt="logo" height="256" width="256"></a>
+    </div>
+  </div>
+  <div class="container pt-6 px-0-mobile mx-0-mobile">
+    <div class="columns is-centered mt-6">
+      <div class="column is-4-desktop is-6-tablet is-10-mobile center">
+        <div class="card px-6 py-6 ">
+          <div class="card-content">
+            <form action="{{ url_for('results') }}" class="form">
+              <input type="hidden" class="is-hidden" name="tableSno" value="{{ tableSno }}">
+              <div class="field">
+                <label for="roll" class="label ">Roll No: </label>
+                <div class="control">
+                  <input type="text" id="roll" name="roll" class="input is-dark is-rounded" required>
+                </div>
+              </div>
+          </div>
+          <div class="pt-5 has-text-right">
+            <input type="submit" class="button has-text-light color is-rounded">
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="py-5">
+    <div class="has-text-centered">
+      <p class="has-text-light">
+        Developed by <strong>Lokesh</strong> and <strong>Akhilesh</strong>
+      <p class="has-text-light">With the help of <strong>K Bhanu Prakash</strong>, Assistant Professor</p>
+      </p>
+      <p class="has-text-light">
+        Powered by <strong>SVCE Exam Cell</strong>
+      </p>
+    </div>
+  </footer>
+
+  </div>
+</body>
