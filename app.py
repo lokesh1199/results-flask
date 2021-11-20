@@ -18,13 +18,13 @@ def home():
 
 @app.route('/roll/<table>')
 def roll(table):
-    return render_template('roll.html', tableSno=table)
+    return render_template('roll.html', table=table)
 
 
 @app.route('/results')
 def results():
     rollno = request.args.get('roll').strip()
-    tableSno = request.args.get('tableSno').strip()
+    tableSno = request.args.get('table').strip()
     rollno = rollno.upper()
     if not checkRoll(rollno):
         return redirect('error')
