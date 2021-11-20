@@ -23,6 +23,23 @@
       width: 100%;
       box-shadow: black;
     }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      .printable * {
+        visibility: visible;
+      }
+
+      .printable {
+        position: absolute;
+        overflow: visible;
+        left: 0;
+        top: 0;
+      }
+    }
   </style>
 </head>
 
@@ -33,7 +50,7 @@
         <img src="static/images/svcelogo.png" alt="logo" height="256" width="256"></a>
     </div>
   </div>
-  <div class="container pt-6 px-0-mobile mx-0-mobile">
+  <div class="container pt-1 px-0-mobile mx-0-mobile">
     {% block content %} {% endblock content %}
   </div>
   <footer class="py-3">

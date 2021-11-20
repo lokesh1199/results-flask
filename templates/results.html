@@ -5,8 +5,8 @@ Results
 {% endblock title %}
 
 {% block content %}
-<section class="section">
-    <p class="subtitle has-text-centered mb-6 is-underlined py-3 is-bold">{{ examName }}</p>
+<section class="section printable">
+    <p class="subtitle has-text-centered mb-6 is-underlined  is-bold">{{ examName }}</p>
     <div class="table-container">
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
             <tr>
@@ -65,4 +65,7 @@ Results
         </table>
     </div>
 </section>
+<div class="level-right mr-6">
+    <button onclick="javascript:window.print()" class="button is-rounded color has-text-light">Print</button>
+</div>
 {% endblock content %}
