@@ -10,15 +10,6 @@ def parseCSV(filename):
         return res
 
 
-def countSubjects(data: list):
-    index = 10
-    while index < len(data):
-        if data[index][0] == 'SGPA':
-            return index - 10
-        index += 1
-    return index - 10
-
-
 def stripEmptyCells(row: list):
     return [i for i in row if i]
 
@@ -93,14 +84,14 @@ def insertSubjectValues(subjectCode, subjectName, con):
         pass
 
 
-def addSubjects(data: list, subjectCount, con):
-    for i in range(10, 10 + countSubjects(data)):
-        insertSubjectValues(*data[i][:2], con)
+def addSubjects(data, con):
+    for subjectCode, subjectName in data:
+        insertSubjectValues(subjectCode, subjectName, con)
 
 
 def createMetadataTable(con):
     createSQL = '''CREATE TABLE metadata (
-        sno integer,
+        sno integer PRIMARY KEY,
         date text,
         name text
     )'''
@@ -124,11 +115,9 @@ def insertMetadataValues(tableName, con):
 
 
 def insertResultsData(data: list, tableName, con):
-    count = 0
-    subjectCount = countSubjects(data)
+    subjects = set()
 
     insertMetadataValues(tableName, con)
-    addSubjects(data, subjectCount, con)
 
     index = 8
     while index < len(data):
@@ -138,13 +127,16 @@ def insertResultsData(data: list, tableName, con):
         insertStudentValues(rollno, name, con)
 
         j = index + 2
-        while j <= index + subjectCount + 1:
+        while data[j][0] != 'SGPA':
+            subjects.add((data[j][0], data[j][1]))
             row = data[j][:9]
             row = [rollno] + row[:1] + row[2:]
             insertResultsValues(row, tableName, con)
             j += 1
 
         index = j+2
+
+    addSubjects(subjects, con)
 
 
 def createAllTables():
@@ -163,14 +155,6 @@ def main():
     tableName = 't_1_1_r20_regular_august_2020'
     createResultsTable(tableName, con)
     insertResultsData(parseCSV('marks/marks.csv'), tableName, con)
-
-    # sql = f'SELECT * FROM {tableName} WHERE rollno="20BF1A3311"'
-    # print(sql)
-    # sql = 'SELECT tbl_name FROM sqlite_master'
-    # sql = f'''SELECT * FROM metadata ORDER BY sno DESC LIMIT 10'''
-    # cur = con.cursor()
-    # for row in cur.execute(sql):
-    # print(row)
 
 
 if __name__ == '__main__':
