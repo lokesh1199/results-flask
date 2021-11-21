@@ -1,168 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'layout_dark.html' %}
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>
-    SVCE - Admin Panel
-  </title>
-  <link rel="stylesheet" href="/static/css/bulma.min.css" />
-  <link rel="icon" href="/static/images/favicon.png">
-  <style>
-    .center {
-      margin: 0 auto;
-    }
+{% block content %}
+<div class="container pt-6 px-0-mobile mx-0-mobile">
+  <div class="columns is-centered mt-6">
+    <div class="column is-5-desktop is-6-tablet is-10-mobile center">
+      <div class="card px-4 py-4 ">
+        <div class="card-content">
 
-    .color {
-      background-color: #1E2944;
-    }
+          <form action="{{ url_for('upload') }} " class="form" method="post" enctype="multipart/form-data">
+            <label class="label">Exam date:</label>
+            <div class="select mr-3">
+              <select name="examMonth" id="examMonth">
+                {% for examMonth in examMonths %}
+                <option value="{{ examMonth }}">{{ examMonth }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="select">
+              <select name="examMonth" id="examMonth">
+                {% for examYear in examYears %}
+                <option value="{{ examYear }}">{{ examYear }}</option>
+                {% endfor %}
+              </select>
+            </div>
 
-    html,
-    body {
-      margin: 0;
-      height: 100%;
-    }
+            <label for="year" class="label mt-2">Year:</label>
+            <div class="select">
+              <select name="year" id="year">
+                {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+              </select>
+            </div>
 
-    body {
-      background-image: url('/static/images/panel.jpg');
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
+            <label for="sem" class="label mt-2">Semester:</label>
+            <div class="select">
+              <select name="sem" id="sem">
+                {% for sem in sems %}
+                <option value="{{ sem }}">{{ sem }}</option>
+                {% endfor %}
+              </select>
+            </div>
 
-    .card {
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 35px;
-    }
+            <label class="label mt-2">Examination:</label>
+            <div class="control">
+              <label class="radio">
+                <input type="radio" name="regOrSup" value="regular" required>
+                Regular
+              </label>
+              <label class="radio">
+                <input type="radio" name="regOrSup" value="supplementary" required>
+                Supplementary
+              </label>
+            </div>
 
-    .navbar {
-      background-color: rgba(30, 41, 68, 0.5);
-    }
-
-    footer {
-      background-color: rgba(30, 41, 68, 0.5);
-      position: absolute;
-      bottom: 0px;
-      width: 100%;
-    }
-
-    strong {
-      color: white;
-      font-size: 1.2em;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="navbar">
-    <div class="navbar-brand">
-      <a href="{{ url_for('home') }} ">
-        <img src="/static/images/svcelogolight.png" alt="logo" height="256" width="256"></a>
-    </div>
-  </div>
-  <div class="container pt-6 px-0-mobile mx-0-mobile">
-    <div class="columns is-centered mt-6">
-      <div class="column is-5-desktop is-6-tablet is-10-mobile center">
-        <div class="card px-4 py-4 ">
-          <div class="card-content">
-
-            <form action="{{ url_for('upload') }} " class="form" method="post">
-              <label class="label">Exam date:</label>
-              <div class="select mr-3">
-                <select name="examMonth" id="examMonth">
-                  {% for examMonth in examMonths %}
-                  <option value="{{ examMonth }}">{{ examMonth }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="select">
-                <select name="examMonth" id="examMonth">
-                  {% for examYear in examYears %}
-                  <option value="{{ examYear }}">{{ examYear }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-
-              <label for="year" class="label mt-2">Year:</label>
-              <div class="select">
-                <select name="year" id="year">
-                  {% for year in years %}
-                  <option value="{{ year }}">{{ year }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-
-              <label for="sem" class="label mt-2">Semester:</label>
-              <div class="select">
-                <select name="sem" id="sem">
-                  {% for sem in sems %}
-                  <option value="{{ sem }}">{{ sem }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-
-              <label class="label mt-2">Examination:</label>
-              <div class="control">
-                <label class="radio">
-                  <input type="radio" name="regOrSup" value="regular">
-                  Regular
-                </label>
-                <label class="radio">
-                  <input type="radio" name="regOrSup" value="supplementary">
-                  Supplementary
-                </label>
-              </div>
-
-              <div id="file-js" class="file has-name mt-5 is-info">
-                <label class="file-label">
-                  <input class="file-input" type="file" name="results">
-                  <span class="file-cta">
-                    <span class="file-icon">
-                      <i class="fas fa-upload"></i>
-                    </span>
-                    <span class="file-label">
-                      Choose a file…
-                    </span>
+            <div id="file-js" class="file has-name mt-5 is-info">
+              <label class="file-label">
+                <input class="file-input" type="file" name="results" required>
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fas fa-upload"></i>
                   </span>
-                  <span class="file-name">
-                    No file uploaded
+                  <span class="file-label">
+                    Choose a CSV file…
                   </span>
-                </label>
-              </div>
-              <div class="has-text-right">
-                <input type="submit" class="mt-6 button is-info">
-              </div>
-            </form>
-          </div>
+                </span>
+                <span class="file-name">
+                  No file uploaded
+                </span>
+              </label>
+            </div>
+            {% if error %}
+            <p class="has-text-danger pt-5 has-text-centered">Invalid File</p>
+            {% elif success %}
+            <p class="has-text-success pt-5 has-text-centered">File</p>
+            {% endif %}
+            <div class="has-text-right">
+              <input type="submit" class="mt-6 button is-info">
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  </div>
-  <footer class="py-5">
-    <div class="has-text-centered">
-      <p class="has-text-light">
-        Developed by <strong>Lokesh</strong> and <strong>Akhilesh</strong>
-      <p class="has-text-light">With the help of <strong>K Bhanu Prakash</strong>, Assistant Professor</p>
-      </p>
-      <p class="has-text-light">
-        Powered by <strong>SVCE Exam Cell</strong>
-      </p>
-    </div>
-  </footer>
 
-  <script>
-    const fileInput = document.querySelector('#file-js input[type=file]');
-    fileInput.onchange = () => {
-      if (fileInput.files.length > 0) {
-        const fileName = document.querySelector('#file-js .file-name');
-        fileName.textContent = fileInput.files[0].name;
-      }
+
+<script>
+  const fileInput = document.querySelector('#file-js input[type=file]');
+  fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+      const fileName = document.querySelector('#file-js .file-name');
+      fileName.textContent = fileInput.files[0].name;
     }
-  </script>
-
-</body>
-
-</html>
+  }
+</script>
+{% endblock content %}
