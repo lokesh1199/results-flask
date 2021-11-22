@@ -6,14 +6,22 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>
-    SVCE- {% block title %} {% endblock title %}
+    SVCE - Home
   </title>
   <link rel="stylesheet" href="/static/css/bulma.min.css" />
   <link rel="icon" href="/static/images/favicon.png">
   <style>
+    .center {
+      margin: 0 auto;
+    }
+
+    .color {
+      background-color: #1E2944;
+    }
+
     html,
     body {
-      margin: 0 5px;
+      margin: 0;
       height: 100%;
     }
 
@@ -23,59 +31,57 @@
       background-size: cover;
     }
 
-    .center {
-      margin: 0 auto;
+
+    .card {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 35px;
     }
 
-    .color {
-      background-color: #1E2944;
+
+    .navbar {
+      background-color: rgba(30, 41, 68, 0.5);
     }
 
     footer {
-      box-shadow: black;
+      background-color: rgba(30, 41, 68, 0.5);
+      width: 100%;
+      position: fixed;
+      bottom: 0px;
     }
 
-    @media print {
-      body * {
-        visibility: hidden;
-      }
+    strong {
+      color: white;
+      font-size: 1.2em;
+    }
 
-      .printable * {
-        visibility: visible;
-      }
-
-      .printable {
-        position: absolute;
-        overflow: visible;
-        left: 0;
-        top: 0;
-      }
+    .button {
+      border: 0px;
     }
   </style>
 </head>
 
 <body>
-  <div class="navbar has-shadow">
+  <div class="navbar">
     <div class="navbar-brand">
       <a href="{{ url_for('home') }} ">
-        <img src="static/images/svcelogo.png" alt="logo" height="256" width="256"></a>
+        <img src="/static/images/svcelogolight.png" alt="logo" height="256" width="256"></a>
     </div>
     {% block navbarButton %} {% endblock navbarButton %}
   </div>
-  <div class="container pt-1 px-0-mobile mx-0-mobile">
-    {% block content %} {% endblock content %}
-  </div>
-  <footer class="py-3">
+
+  {% block content %} {% endblock content %}
+
+  <footer class="py-5 is-fixed-bottom">
     <div class="has-text-centered">
-      <p>
+      <p class="has-text-light">
         Developed by <strong>Lokesh</strong> and <strong>Akhilesh</strong>
       </p>
-      <p>With the help of <strong>K Bhanu Prakash</strong>, Assistant Professor</p>
-      <p>
+      <p class="has-text-light">With the help of <strong>K Bhanu Prakash</strong>, Assistant Professor</p>
+      <p class="has-text-light">
         Powered by <strong>SVCE Exam Cell</strong>
       </p>
     </div>
   </footer>
-</body>
 
-</html>
+  </div>
+</body>

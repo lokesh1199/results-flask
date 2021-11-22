@@ -1,8 +1,4 @@
-import sqlite3
-
 # TODO Migrate to SQLAlchemy
-
-
 def getName(con, rollno, tableName):
     cur = con.cursor()
     SQL = f'SELECT name FROM students WHERE rollno="{rollno}"'
@@ -76,7 +72,6 @@ def getMarks(con, rollno, tableName):
 
 
 def parseTableName(name):
-    name = 't_I_I_r20_regular_august_2021'
     name = name.split('_')[1:]
     res = f'{name[0].upper()} Year {name[1].upper()} Semester '
     res += f'({name[2].title()}) {name[3].title()} Examinations, {name[4].title()} {name[5]}'
@@ -86,7 +81,7 @@ def parseTableName(name):
 def getResultsList(con):
     cur = con.cursor()
     # TODO Implement pagination
-    sql = 'SELECT * FROM metadata ORDER BY sno LIMIT 10'
+    sql = 'SELECT * FROM metadata ORDER BY sno DESC LIMIT 17'
 
     res = []
     for row in cur.execute(sql):

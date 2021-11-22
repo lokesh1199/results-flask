@@ -4,6 +4,16 @@
 Home
 {% endblock title %}
 
+{% block navbarButton %}
+<div class="navbar-menu">
+    <div class="navbar-end">
+        <div class="navbar-item">
+            <a href="/admin" class="button color has-text-white is-rounded">Upload</a>
+        </div>
+    </div>
+</div>
+{% endblock navbarButton %}
+
 {% block content %}
 <div class="table-container my-6 ">
     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">

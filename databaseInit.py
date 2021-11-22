@@ -73,7 +73,8 @@ def createSubjectTable(con):
 
 
 def insertSubjectValues(subjectCode, subjectName, con):
-    insertSQL = f'INSERT INTO subjects VALUES ("{subjectCode}", "{subjectName}")'
+    insertSQL = f'''INSERT INTO subjects VALUES (
+        "{subjectCode}", "{subjectName}")'''
 
     cur = con.cursor()
     try:
@@ -90,7 +91,7 @@ def addSubjects(data, con):
 
 
 def createMetadataTable(con):
-    createSQL = '''CREATE TABLE metadata (
+    createSQL = '''CREATE TABLE metadata(
         sno integer PRIMARY KEY,
         date text,
         name text
@@ -108,7 +109,8 @@ def insertMetadataValues(tableName, con):
     count = count[0] + 1 if count else 1
 
     date = datetime.now().strftime(r'%d-%m-%Y')
-    insertSQL = f'INSERT INTO metadata VALUES ("{count}", "{date}", "{tableName}")'
+    insertSQL = f'''INSERT INTO metadata VALUES (
+        "{count}", "{date}", "{tableName}")'''
     cur = con.cursor()
     cur.execute(insertSQL)
     con.commit()
@@ -116,8 +118,6 @@ def insertMetadataValues(tableName, con):
 
 def insertResultsData(data: list, tableName, con):
     subjects = set()
-
-    insertMetadataValues(tableName, con)
 
     index = 8
     while index < len(data):
@@ -136,7 +136,9 @@ def insertResultsData(data: list, tableName, con):
 
         index = j+2
 
-    addSubjects(subjects, con)
+    if len(subjects):
+        addSubjects(subjects, con)
+        insertMetadataValues(tableName, con)
 
 
 def createAllTables():
@@ -147,15 +149,14 @@ def createAllTables():
     createMetadataTable(con)
 
 
-# TODO Remove this in production
-def main():
-    con = sqlite3.connect('results.db')
-    # createAllTables()
+def insertNewCSV(year, sem, regulation, regOrSup, examMonth, examYear,
+                 fileName):
+    tableName = f't_{year}_{sem}_{regulation}_{regOrSup}_{examMonth}_{examYear}'
 
-    tableName = 't_1_1_r20_regular_august_2020'
+    con = sqlite3.connect('results.db')
     createResultsTable(tableName, con)
-    insertResultsData(parseCSV('marks/marks.csv'), tableName, con)
+    insertResultsData(parseCSV(fileName), tableName, con)
 
 
 if __name__ == '__main__':
-    main()
+    createAllTables()

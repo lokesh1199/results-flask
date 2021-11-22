@@ -1,8 +1,18 @@
 {% extends 'layout_dark.html' %}
 
+{% block navbarButton %}
+<div class="navbar-menu">
+  <div class="navbar-end">
+    <div class="navbar-item">
+      <a href="/logout" class="button color has-text-light is-rounded">Logout</a>
+    </div>
+  </div>
+</div>
+{% endblock navbarButton %}
+
 {% block content %}
 <div class="container pt-6 px-0-mobile mx-0-mobile">
-  <div class="columns is-centered mt-6">
+  <div class="columns is-centered">
     <div class="column is-5-desktop is-6-tablet is-10-mobile center">
       <div class="card px-4 py-4 ">
         <div class="card-content">
@@ -17,7 +27,7 @@
               </select>
             </div>
             <div class="select">
-              <select name="examMonth" id="examMonth">
+              <select name="examYear" id="examYear">
                 {% for examYear in examYears %}
                 <option value="{{ examYear }}">{{ examYear }}</option>
                 {% endfor %}
@@ -38,6 +48,15 @@
               <select name="sem" id="sem">
                 {% for sem in sems %}
                 <option value="{{ sem }}">{{ sem }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <label for="regulation" class="label mt-2">Regulation:</label>
+            <div class="select">
+              <select name="regulation" id="regulation">
+                {% for regulation in regulations %}
+                <option value="{{ regulation }}">{{ regulation }}</option>
                 {% endfor %}
               </select>
             </div>
@@ -70,11 +89,11 @@
                 </span>
               </label>
             </div>
-            {% if error %}
-            <p class="has-text-danger pt-5 has-text-centered">Invalid File</p>
-            {% elif success %}
-            <p class="has-text-success pt-5 has-text-centered">File</p>
-            {% endif %}
+            {% for category, message in get_flashed_messages(with_categories=True) %}
+            <article class="message mt-3 {{ category }}">
+              <div class="message-body has-text-centered">{{ message }}</div>
+            </article>
+            {% endfor %}
             <div class="has-text-right">
               <input type="submit" class="mt-6 button is-info">
             </div>
@@ -84,7 +103,6 @@
     </div>
   </div>
 </div>
-
 
 
 <script>
