@@ -7,7 +7,7 @@ from flask import (Flask, redirect, render_template, request,
 from check import checkFile, checkRoll
 from databaseInit import insertNewCSV
 from marks import (getMarks, getName, getResultsList, getTableName,
-                   parseTableName)
+                   parseTableName, getBranchName)
 
 app = Flask(__name__)
 # TODO Change this in production
@@ -42,10 +42,12 @@ def results():
         examName = parseTableName(tableName)
         marks = getMarks(con, rollno, tableName)
         name = getName(con, rollno, tableName)
+        branch = getBranchName(con, rollno)
 
         return render_template('results.html', marks=marks, name=name,
-                               rollno=rollno, examName=examName)
+                               rollno=rollno, examName=examName, branch=branch)
     except Exception as e:
+        raise e
         return redirect('/error')
 
 

@@ -141,12 +141,45 @@ def insertResultsData(data: list, tableName, con):
         insertMetadataValues(tableName, con)
 
 
+def createBranchesTable(con):
+    createSQL = '''CREATE TABLE branches (
+        branch_code text PRIMARY KEY,
+        branch_name text
+    )'''
+
+    cur = con.cursor()
+    cur.execute(createSQL)
+    con.commit()
+
+
+def insertBranchValues(con):
+    branches = {
+        '01': 'Civil Engineering',
+        '02': 'Electrical and Electronics Engineering',
+        '03': 'Mechanical Engineering',
+        '04': 'Electronics and Communication Engineering',
+        '05': 'Computer Science and Engineering',
+        '12': 'Information Technology',
+        '33': 'Artificial Intelligence & Machine learning'
+    }
+
+    insertSQL = 'INSERT INTO branches VALUES ("{}", "{}")'
+    cur = con.cursor()
+
+    for branchCode in branches:
+        cur.execute(insertSQL.format(branchCode, branches[branchCode]))
+
+    con.commit()
+
+
 def createAllTables():
     con = sqlite3.connect('results.db')
 
     createStudentTable(con)
     createSubjectTable(con)
     createMetadataTable(con)
+    createBranchesTable(con)
+    insertBranchValues(con)
 
 
 def insertNewCSV(year, sem, regulation, regOrSup, examMonth, examYear,

@@ -94,3 +94,11 @@ def getTableName(sno, con):
     cur = con.cursor()
     cur.execute(sql)
     return cur.fetchone()[0]
+
+
+def getBranchName(con, roll):
+    branchCode = roll[6:8]
+    sql = f'SELECT branch_name FROM branches WHERE branch_code={branchCode}'
+    cur = con.cursor()
+    cur.execute(sql)
+    return cur.fetchone()[0]
