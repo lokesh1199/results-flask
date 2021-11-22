@@ -6,7 +6,7 @@ Results
 
 {% block content %}
 <section class="section printable">
-    <p class="subtitle has-text-centered mb-6 is-underlined  is-bold">{{ examName }}</p>
+    <p class="subtitle has-text-centered mb-4 is-underlined is-bold">{{ examName }}</p>
     <div class="table-container">
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
             <tr>
@@ -47,8 +47,6 @@ Results
                     {% endfor %}
                 </tr>
                 {% endfor %}
-            </tbody>
-            <tfoot>
                 <tr>
                     <th colspan="2">Max Marks</th>
                     <td colspan="9">{{ marks[-1]['maxMarks']}}</td>
@@ -65,7 +63,7 @@ Results
                     <th colspan="2">SGPA</th>
                     <td colspan="9">{{ marks[-1]['sgpa']}}</td>
                 </tr>
-            </tfoot>
+            </tbody>
         </table>
     </div>
 </section>

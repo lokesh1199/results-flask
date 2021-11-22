@@ -46,8 +46,7 @@ def results():
 
         return render_template('results.html', marks=marks, name=name,
                                rollno=rollno, examName=examName, branch=branch)
-    except Exception as e:
-        raise e
+    except:
         return redirect('/error')
 
 
@@ -112,10 +111,8 @@ def logout():
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
-    if request.method == 'GET':
+    if request.method == 'GET' or not session.get('admin'):
         return redirect('/admin')
-    elif not session.get('admin'):
-        return redirect('/')
     else:
         examMonth = request.form.get('examMonth')
         examYear = request.form.get('examYear')

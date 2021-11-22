@@ -58,14 +58,14 @@
   <div class="navbar has-shadow">
     <div class="navbar-brand">
       <a href="{{ url_for('home') }} ">
-        <img src="static/images/svcelogo.png" alt="logo" height="256" width="256"></a>
+        <img src="/static/images/svcelogo.png" alt="logo" height="256" width="256"></a>
     </div>
     {% block navbarButton %} {% endblock navbarButton %}
   </div>
   <div class="container pt-1 px-0-mobile mx-0-mobile">
     {% block content %} {% endblock content %}
   </div>
-  <footer class="py-3">
+  <footer class="py-4">
     <div class="has-text-centered">
       <p>
         Developed by <strong>Lokesh</strong> and <strong>Akhilesh</strong>
