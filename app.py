@@ -7,10 +7,11 @@ from flask import (Flask, redirect, render_template, request,
 from check import checkFile, checkRoll
 from databaseInit import insertNewCSV
 from marks import (getMarks, getName, getResultsList, getTableName,
-                   parseTableName, getBranchName)
+                   parseTableName, getBranchName, getResultsListCount,
+                   getResultsPageNavList)
 
 app = Flask(__name__)
-# TODO Change this in production
+# TODO: Change this in production
 app.config['SECRET_KEY'] = '6d5843bbf5bdc0f249376717e6d32919715b4bd02b89'
 
 
@@ -18,8 +19,23 @@ app.config['SECRET_KEY'] = '6d5843bbf5bdc0f249376717e6d32919715b4bd02b89'
 @app.route('/home')
 def home():
     con = sqlite3.connect('results.db')
-    resultsList = getResultsList(con)
-    return render_template('home.html', resultsList=resultsList)
+    page = request.args.get('page', 1, type=int)
+
+    perPage = 17
+
+    totalResults = getResultsListCount(con)
+    pages = totalResults // perPage
+    resultsList = getResultsList(con, page, perPage)
+    navList = getResultsPageNavList(con, perPage, page)
+
+    if len(resultsList) == 0:
+        return redirect('/error')
+
+    prevUrl = url_for('home', page=page-1) if page > 1 else None
+    nextUrl = url_for('home', page=page+1) if page <= pages else None
+
+    return render_template('home.html', resultsList=resultsList, page=page,
+                           prevUrl=prevUrl, nextUrl=nextUrl, navList=navList)
 
 
 @app.route('/roll/<table>')
@@ -143,7 +159,7 @@ def upload():
         return redirect('/admin')
 
 
-# TODO Remove this in production
+# TODO: Remove this in production
 @app.route('/static/<file>')
 def staticFiles(file):
     return send_from_directory(file, 'static')
