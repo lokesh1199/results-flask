@@ -1,5 +1,6 @@
 import sqlite3
 from os import remove
+from math import ceil
 
 from flask import (Flask, flash, redirect, render_template, request,
                    send_from_directory, session, url_for)
@@ -26,7 +27,7 @@ def home():
     perPage = 17
 
     totalResults = getResultsListCount(con)
-    pages = totalResults // perPage
+    pages = ceil(totalResults / perPage)
     resultsList = getResultsList(con, page, perPage)
     navList = getResultsPageNavList(con, perPage, page)
 
@@ -128,7 +129,7 @@ def delete():
         perPage = 17
 
         totalResults = getResultsListCount(con)
-        pages = totalResults // perPage
+        pages = ceil(totalResults / perPage)
         resultsList = getResultsList(con, page, perPage)
         navList = getResultsPageNavList(con, perPage, page)
 
