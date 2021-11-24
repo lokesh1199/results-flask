@@ -1,14 +1,16 @@
 import sqlite3
 from os import remove
 
-from flask import (Flask, redirect, render_template, request,
-                   send_from_directory, session, url_for, flash)
+from flask import (Flask, flash, redirect, render_template, request,
+                   send_from_directory, session, url_for)
 
 from check import checkFile, checkRoll
-from databaseInit import insertNewCSV
-from marks import (getMarks, getName, getResultsList, getTableName,
-                   parseTableName, getBranchName, getResultsListCount,
-                   getResultsPageNavList)
+from database.delete import deleteResultsTable
+from database.heplers import parseTableName
+from database.insert import insertNewCSV
+from database.query import (getBranchName, getMarks, getName, getResultsList,
+                            getResultsListCount, getResultsPageNavList,
+                            getTableName)
 
 app = Flask(__name__)
 # TODO: Change this in production
@@ -28,11 +30,8 @@ def home():
     resultsList = getResultsList(con, page, perPage)
     navList = getResultsPageNavList(con, perPage, page)
 
-    if len(resultsList) == 0:
-        return redirect('/error')
-
     prevUrl = url_for('home', page=page-1) if page > 1 else None
-    nextUrl = url_for('home', page=page+1) if page <= pages else None
+    nextUrl = url_for('home', page=page+1) if page < pages else None
 
     return render_template('home.html', resultsList=resultsList, page=page,
                            prevUrl=prevUrl, nextUrl=nextUrl, navList=navList)
@@ -116,6 +115,39 @@ def admin():
                                bgImage=bgImage)
 
 
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    bgImage = '/static/images/panel.jpg'
+    con = sqlite3.connect('results.db')
+
+    if not session.get('admin'):
+        return redirect('/admin')
+    elif not request.args.get('table'):
+        page = request.args.get('page', 1, type=int)
+
+        perPage = 17
+
+        totalResults = getResultsListCount(con)
+        pages = totalResults // perPage
+        resultsList = getResultsList(con, page, perPage)
+        navList = getResultsPageNavList(con, perPage, page)
+
+        prevUrl = url_for('home', page=page-1) if page > 1 else None
+        nextUrl = url_for('home', page=page+1) if page < pages else None
+
+        return render_template('admin_delete.html', resultsList=resultsList,
+                               page=page, prevUrl=prevUrl, nextUrl=nextUrl,
+                               navList=navList)
+    else:
+        tableSno = request.args.get('table')
+        try:
+            tableName = deleteResultsTable(con, tableSno)
+            flash(f'Successfully Deleted {tableName} Results', 'is-success')
+        except:
+            flash('Failed to Delete', 'is-danger')
+        return redirect('/delete')
+
+
 @app.route('/logout')
 def logout():
     if session.get('admin'):
@@ -146,15 +178,13 @@ def upload():
             file.save(fileName)
 
             try:
-                insertNewCSV(year, sem, regulation, regOrSup,
-                             examMonth, examYear, fileName)
+                tableName = insertNewCSV(year, sem, regulation, regOrSup,
+                                         examMonth, examYear, fileName)
+                flash(f'Successfully added {tableName} Results', 'is-success')
             except:
                 flash('Results File Already Exists', 'is-danger')
-                return redirect('/admin')
             finally:
                 remove(fileName)
-
-            flash('File Uploaded Successfully', 'is-success')
 
         return redirect('/admin')
 

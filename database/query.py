@@ -1,5 +1,7 @@
 from math import ceil
 
+from .heplers import parseTableName
+
 
 def getName(con, rollno, tableName):
     cur = con.cursor()
@@ -74,14 +76,6 @@ def getMarks(con, rollno, tableName):
     return output
 
 
-def parseTableName(name):
-    name = name.split('_')[1:]
-    res = f'{name[0].upper()} Year {name[1].upper()} Semester '
-    res += f'({name[2].title()}) {name[3].title()} Examinations, '
-    res += f'{name[4].title()} {name[5]}'
-    return res
-
-
 def getResultsListCount(con):
     sql = 'SELECT COUNT(*) FROM metadata'
 
@@ -92,6 +86,7 @@ def getResultsListCount(con):
 
 def getResultsPageNavList(con, perPage, page):
     pages = ceil(getResultsListCount(con) / perPage)
+    pages = 1 if not pages else pages
 
     res = [1]
 

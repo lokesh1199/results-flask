@@ -1,0 +1,75 @@
+import sqlite3
+
+
+def createResultsTable(tableName, con):
+    cur = con.cursor()
+    createSQL = f'''CREATE TABLE {tableName} (
+        rollno text,
+        subject_code text,
+        internal integer,
+        external integer,
+        total integer,
+        result_status text,
+        credits integer,
+        grades text,
+        grade_points integer
+    )'''
+    cur.execute(createSQL)
+    con.commit()
+
+
+def createStudentTable(con):
+    createSQL = '''CREATE TABLE students (
+        rollno text PRIMARY KEY,
+        name text
+    )'''
+
+    cur = con.cursor()
+    cur.execute(createSQL)
+    con.commit()
+
+
+def createSubjectTable(con):
+    createSQL = '''CREATE TABLE subjects (
+        subject_code text PRIMARY KEY,
+        subject_name text
+    )'''
+
+    cur = con.cursor()
+    cur.execute(createSQL)
+    con.commit()
+
+
+def createMetadataTable(con):
+    createSQL = '''CREATE TABLE metadata(
+        sno integer PRIMARY KEY,
+        date text,
+        name text
+    )'''
+    cur = con.cursor()
+    cur.execute(createSQL)
+    con.commit()
+
+
+# def createBranchesTable(con):
+#     createSQL = '''CREATE TABLE branches (
+#         branch_code text PRIMARY KEY,
+#         branch_name text
+#     )'''
+
+#     cur = con.cursor()
+#     cur.execute(createSQL)
+#     con.commit()
+
+
+def createAllTables():
+    con = sqlite3.connect('results.db')
+
+    createStudentTable(con)
+    createSubjectTable(con)
+    createMetadataTable(con)
+    # createBranchesTable(con)
+
+
+if __name__ == '__main__':
+    createAllTables()

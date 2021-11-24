@@ -1,51 +1,14 @@
 import sqlite3
 from datetime import datetime
 
-
-def parseCSV(filename):
-    with open(filename) as file:
-        res = []
-        for line in file:
-            res.append(list(map(str.strip, line.split(','))))
-        return res
-
-
-def stripEmptyCells(row: list):
-    return [i for i in row if i]
-
-
-def createResultsTable(tableName, con):
-    cur = con.cursor()
-    createSQL = f'''CREATE TABLE {tableName} (
-        rollno text,
-        subject_code text,
-        internal integer,
-        external integer,
-        total integer,
-        result_status text,
-        credits integer,
-        grades text,
-        grade_points integer
-    )'''
-    cur.execute(createSQL)
-    con.commit()
+from .create import createResultsTable
+from .heplers import stripEmptyCells, parseCSV, parseTableName
 
 
 def insertResultsValues(data, tableName, con):
     insertSQL = f'''INSERT INTO {tableName} values {tuple(data)}'''
 
     cur = con.execute(insertSQL)
-    con.commit()
-
-
-def createStudentTable(con):
-    createSQL = '''CREATE TABLE students (
-        rollno text PRIMARY KEY,
-        name text
-    )'''
-
-    cur = con.cursor()
-    cur.execute(createSQL)
     con.commit()
 
 
@@ -61,17 +24,6 @@ def insertStudentValues(rollno, name, con):
         pass
 
 
-def createSubjectTable(con):
-    createSQL = '''CREATE TABLE subjects (
-        subject_code text PRIMARY KEY,
-        subject_name text
-    )'''
-
-    cur = con.cursor()
-    cur.execute(createSQL)
-    con.commit()
-
-
 def insertSubjectValues(subjectCode, subjectName, con):
     insertSQL = f'''INSERT INTO subjects VALUES (
         "{subjectCode}", "{subjectName}")'''
@@ -83,22 +35,6 @@ def insertSubjectValues(subjectCode, subjectName, con):
     except:
         # Already exists
         pass
-
-
-def addSubjects(data, con):
-    for subjectCode, subjectName in data:
-        insertSubjectValues(subjectCode, subjectName, con)
-
-
-def createMetadataTable(con):
-    createSQL = '''CREATE TABLE metadata(
-        sno integer PRIMARY KEY,
-        date text,
-        name text
-    )'''
-    cur = con.cursor()
-    cur.execute(createSQL)
-    con.commit()
 
 
 def insertMetadataValues(tableName, con):
@@ -141,27 +77,6 @@ def insertResultsData(data: list, tableName, con):
         insertMetadataValues(tableName, con)
 
 
-# def createBranchesTable(con):
-#     createSQL = '''CREATE TABLE branches (
-#         branch_code text PRIMARY KEY,
-#         branch_name text
-#     )'''
-
-#     cur = con.cursor()
-#     cur.execute(createSQL)
-#     con.commit()
-
-
-def createAllTables():
-    con = sqlite3.connect('results.db')
-
-    createStudentTable(con)
-    createSubjectTable(con)
-    createMetadataTable(con)
-    createBranchesTable(con)
-    insertBranchValues(con)
-
-
 def insertNewCSV(year, sem, regulation, regOrSup, examMonth, examYear,
                  fileName):
     tableName = f't_{year}_{sem}_{regulation}_{regOrSup}_{examMonth}_{examYear}'
@@ -170,6 +85,9 @@ def insertNewCSV(year, sem, regulation, regOrSup, examMonth, examYear,
     createResultsTable(tableName, con)
     insertResultsData(parseCSV(fileName), tableName, con)
 
+    return parseTableName(tableName)
 
-if __name__ == '__main__':
-    createAllTables()
+
+def addSubjects(data, con):
+    for subjectCode, subjectName in data:
+        insertSubjectValues(subjectCode, subjectName, con)
