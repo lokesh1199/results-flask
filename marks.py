@@ -132,9 +132,19 @@ def getTableName(sno, con):
     return cur.fetchone()[0]
 
 
-def getBranchName(con, roll):
+def getBranchName(roll):
+
+    branches = {
+        '01': 'Civil Engineering',
+        '02': 'Electrical and Electronics Engineering',
+        '03': 'Mechanical Engineering',
+        '04': 'Electronics and Communication Engineering',
+        '05': 'Computer Science and Engineering',
+        '12': 'Information Technology',
+        '33': 'Artificial Intelligence & Machine Learning',
+        '06': 'Data Science',
+        '07': 'Cyber Security',
+    }
+
     branchCode = roll[6:8]
-    sql = f'SELECT branch_name FROM branches WHERE branch_code="{branchCode}"'
-    cur = con.cursor()
-    cur.execute(sql)
-    return cur.fetchone()[0]
+    return branches[branchCode]
