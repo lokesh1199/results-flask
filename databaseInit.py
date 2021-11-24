@@ -141,35 +141,15 @@ def insertResultsData(data: list, tableName, con):
         insertMetadataValues(tableName, con)
 
 
-def createBranchesTable(con):
-    createSQL = '''CREATE TABLE branches (
-        branch_code text PRIMARY KEY,
-        branch_name text
-    )'''
+# def createBranchesTable(con):
+#     createSQL = '''CREATE TABLE branches (
+#         branch_code text PRIMARY KEY,
+#         branch_name text
+#     )'''
 
-    cur = con.cursor()
-    cur.execute(createSQL)
-    con.commit()
-
-
-def insertBranchValues(con):
-    branches = {
-        '01': 'Civil Engineering',
-        '02': 'Electrical and Electronics Engineering',
-        '03': 'Mechanical Engineering',
-        '04': 'Electronics and Communication Engineering',
-        '05': 'Computer Science and Engineering',
-        '12': 'Information Technology',
-        '33': 'Artificial Intelligence & Machine learning'
-    }
-
-    insertSQL = 'INSERT INTO branches VALUES ("{}", "{}")'
-    cur = con.cursor()
-
-    for branchCode in branches:
-        cur.execute(insertSQL.format(branchCode, branches[branchCode]))
-
-    con.commit()
+#     cur = con.cursor()
+#     cur.execute(createSQL)
+#     con.commit()
 
 
 def createAllTables():

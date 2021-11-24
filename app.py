@@ -58,7 +58,7 @@ def results():
         examName = parseTableName(tableName)
         marks = getMarks(con, rollno, tableName)
         name = getName(con, rollno, tableName)
-        branch = getBranchName(con, rollno)
+        branch = getBranchName(rollno)
 
         return render_template('results.html', marks=marks, name=name,
                                rollno=rollno, examName=examName, branch=branch)
