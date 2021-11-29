@@ -41,7 +41,7 @@ def parseTableName(name):
     else:
         course = name[0].upper()
 
-    exam = name[4].upper()
+    exam = name[4].title()
     if name[4] == 'both':
         exam = 'Regular & Supplementary'
 
