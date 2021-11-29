@@ -130,16 +130,16 @@ def getTableName(sno, con):
 def getBranchName(roll):
 
     branches = {
-        '01': 'Civil Engineering',
-        '02': 'Electrical and Electronics Engineering',
-        '03': 'Mechanical Engineering',
-        '04': 'Electronics and Communication Engineering',
-        '05': 'Computer Science and Engineering',
-        '12': 'Information Technology',
-        '33': 'Artificial Intelligence & Machine Learning',
-        '06': 'Data Science',
-        '07': 'Cyber Security',
+        '1A01': 'Civil Engineering',
+        '1A02': 'Electrical and Electronics Engineering',
+        '1A03': 'Mechanical Engineering',
+        '1A04': 'Electronics and Communication Engineering',
+        '1A05': 'Computer Science and Engineering',
+        '1A12': 'Information Technology',
+        '1A33': 'Artificial Intelligence & Machine Learning',
+        '1A06': 'Data Science',
+        '1A07': 'Cyber Security',
     }
 
-    branchCode = roll[6:8]
-    return branches[branchCode]
+    branchCode = roll[4:8]
+    return branches.get(branchCode)

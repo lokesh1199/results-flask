@@ -1,6 +1,7 @@
 import sqlite3
-from os import remove
+from datetime import datetime
 from math import ceil
+from os import remove
 
 from flask import (Flask, flash, redirect, render_template, request,
                    send_from_directory, session, url_for)
@@ -60,10 +61,15 @@ def results():
         name = getName(con, rollno, tableName)
         branch = getBranchName(rollno)
 
+        if branch is None:
+            branch = examName.split()[0]
+
         return render_template('results.html', marks=marks, name=name,
                                rollno=rollno, examName=examName, branch=branch)
     except:
-        return redirect('/error')
+        flash('Invalid Hall Ticket Number for the Exam you have selected.',
+              'is-danger')
+        return redirect('roll/' + table)
 
 
 @app.route('/error')
@@ -100,7 +106,9 @@ def admin():
                 'November',
                 'December'
             )
-            examYears = [year for year in range(2020, 2030)]
+            startYear = datetime.now().year
+
+            examYears = [year for year in range(startYear-3, startYear+6)]
             years = ['I', 'II', 'III', 'IV']
             sems = ['I', 'II']
             regulations = [f'R{i}' for i in range(10, 21)]
@@ -165,9 +173,10 @@ def upload():
     else:
         examMonth = request.form.get('examMonth')
         examYear = request.form.get('examYear')
+        course = request.form.get('course')
         year = request.form.get('year')
         sem = request.form.get('sem')
-        regulation = request.form.get('regulation')
+        regulation = request.form.get('regulation').strip().upper()
         regOrSup = request.form.get('regOrSup')
 
         file = request.files['results']
@@ -179,7 +188,7 @@ def upload():
             file.save(fileName)
 
             try:
-                tableName = insertNewCSV(year, sem, regulation, regOrSup,
+                tableName = insertNewCSV(course, year, sem, regulation, regOrSup,
                                          examMonth, examYear, fileName)
                 flash(f'Successfully added {tableName} Results', 'is-success')
             except:

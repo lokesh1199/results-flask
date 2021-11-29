@@ -77,9 +77,9 @@ def insertResultsData(data: list, tableName, con):
         insertMetadataValues(tableName, con)
 
 
-def insertNewCSV(year, sem, regulation, regOrSup, examMonth, examYear,
+def insertNewCSV(course, year, sem, regulation, regOrSup, examMonth, examYear,
                  fileName):
-    tableName = f't_{year}_{sem}_{regulation}_{regOrSup}_{examMonth}_{examYear}'
+    tableName = f't_{course}_{year}_{sem}_{regulation}_{regOrSup}_{examMonth}_{examYear}'
 
     con = sqlite3.connect('results.db')
     createResultsTable(tableName, con)

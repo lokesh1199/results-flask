@@ -17,6 +17,11 @@
       <input type="submit" class="button has-text-light color is-rounded">
     </div>
     </form>
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+    <article class="message mt-3 {{ category }}">
+      <div class="message-body has-text-centered">{{ message }}</div>
+    </article>
+    {% endfor %}
   </div>
 </div>
 {% endblock content %}

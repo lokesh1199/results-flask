@@ -1,3 +1,6 @@
+import sqlite3
+
+
 def parseCSV(filename):
     with open(filename) as file:
         res = []
@@ -30,7 +33,18 @@ def getBranchName(roll):
 
 def parseTableName(name):
     name = name.split('_')[1:]
-    res = f'{name[0].upper()} Year {name[1].upper()} Semester '
-    res += f'({name[2].title()}) {name[3].title()} Examinations, '
-    res += f'{name[4].title()} {name[5]}'
+    course = None
+    if name[0] == 'btech':
+        course = 'B.Tech'
+    elif name[0] == 'mtech':
+        course = 'M.Tech'
+    else:
+        course = name[0].upper()
+
+    exam = None
+    if name[4] == 'both':
+        exam = 'Regular & Supplementary'
+
+    res = f'{course} {name[1]} Year {name[2]} Semester ({name[3]}) {exam} '
+    res += f'Examinations, {name[5]} {name[6]}'
     return res

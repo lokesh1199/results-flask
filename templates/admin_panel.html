@@ -38,6 +38,16 @@ Admin Panel
             </select>
           </div>
 
+          <label for="course" class="label mt-2">Course:</label>
+          <div class="select">
+            <select name="course" id="course">
+              <option value="btech">B.Tech</option>
+              <option value="mtech">M.Tech</option>
+              <option value="mca">MCA</option>
+              <option value="mba">MBA</option>
+            </select>
+          </div>
+
           <label for="year" class="label mt-2">Year:</label>
           <div class="select">
             <select name="year" id="year">
@@ -57,13 +67,7 @@ Admin Panel
           </div>
 
           <label for="regulation" class="label mt-2">Regulation:</label>
-          <div class="select">
-            <select name="regulation" id="regulation">
-              {% for regulation in regulations %}
-              <option value="{{ regulation }}">{{ regulation }}</option>
-              {% endfor %}
-            </select>
-          </div>
+          <input type="text" class="input column is-3" name="regulation">
 
           <label class="label mt-2">Examination:</label>
           <div class="control">
@@ -74,6 +78,10 @@ Admin Panel
             <label class="radio">
               <input type="radio" name="regOrSup" value="supplementary" required>
               Supplementary
+            </label>
+            <label class="radio">
+              <input type="radio" name="regOrSup" value="both" required>
+              Both
             </label>
           </div>
 
