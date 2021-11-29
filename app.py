@@ -49,12 +49,12 @@ def roll(table):
 def results():
     rollno = request.args.get('roll').strip().upper()
     table = request.args.get('table').strip()
-    if not checkRoll(rollno):
-        return redirect('/error')
 
     con = sqlite3.connect('results.db')
 
     try:
+        if not checkRoll(rollno):
+            raise Exception('Invalid rollno')
         tableName = getTableName(table, con)
         examName = parseTableName(tableName)
         marks = getMarks(con, rollno, tableName)
