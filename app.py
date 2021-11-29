@@ -134,7 +134,7 @@ def delete():
     elif not request.args.get('table'):
         page = request.args.get('page', 1, type=int)
 
-        perPage = 17
+        perPage = 14
 
         totalResults = getResultsListCount(con)
         pages = ceil(totalResults / perPage)
