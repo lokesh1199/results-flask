@@ -51,6 +51,15 @@
         top: 0;
         font-size: 0.8em;
       }
+
+      @page {
+        margin: 0;
+      }
+
+      hr {
+        visibility: hidden;
+      }
+
     }
 
     @font-face {
@@ -72,13 +81,28 @@
     </div>
     {% block navbarButton %} {% endblock navbarButton %}
   </div>
+  <div class=" has-text-centered is-size-4 is-size-5-mobile" style="font-weight:bolder; color: #000080;">
+    <!-- <div class=" has-text-centered is-3" style="font-size:1.5em; font-weight: 900; font-family: CenturyGothic;"> -->
+    SRI VENKATESWARA COLLEGE OF ENGINEERING
+    <br>
+    (AUTONOMOUS)
+  </div>
+  <div class="has-text-centered is-size-6 is-size-6-mobile mb-2">
+    <!-- <div class="has-text-centered " style="font-size:1.1em; font-weight: 900; font-family: CenturyGothic;"> -->
+    Approved by AICTE, Accredited by NAAC with 'A' Grade"
+    <br>
+    Accredited by NBA (CSE, ECE, EEE, ME, CE & IT) & Permanently Affiliated to JNTUA.
+    <br>
+    Karakambadi Road, Tirupati-517507, Andhra Pradesh, INDIA.
+    <!-- <hr> -->
+  </div>
   <div class="container pt-1 px-0-mobile mx-0-mobile">
     {% block content %} {% endblock content %}
   </div>
   <footer class="py-4">
     <div class="has-text-centered">
       <p>
-        Developed by <strong>Lokesh</strong> and <strong>Akhilesh</strong>
+        Results portal developed by <strong>V Lokesh</strong> and <strong>S Akhilesh</strong>
       </p>
       <p>With the help of <strong>K Bhanu Prakash</strong>, Assistant Professor, Department of CSE</p>
       <p>
