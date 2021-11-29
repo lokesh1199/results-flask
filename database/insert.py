@@ -2,7 +2,8 @@ import sqlite3
 from datetime import datetime
 
 from .create import createResultsTable
-from .heplers import stripEmptyCells, parseCSV, parseTableName
+from .heplers import (getNextIndexOfData, parseCSV, parseTableName,
+                      stripEmptyCells)
 
 
 def insertResultsValues(data, tableName, con):
@@ -55,7 +56,7 @@ def insertMetadataValues(tableName, con):
 def insertResultsData(data: list, tableName, con):
     subjects = set()
 
-    index = 8
+    index = getNextIndexOfData(data)
     while index < len(data):
         row = stripEmptyCells(data[index])
         name, rollno = row[1], row[3]
@@ -70,11 +71,10 @@ def insertResultsData(data: list, tableName, con):
             insertResultsValues(row, tableName, con)
             j += 1
 
-        index = j+2
+        index = getNextIndexOfData(data, j)
 
     if len(subjects):
         addSubjects(subjects, con)
-        insertMetadataValues(tableName, con)
 
 
 def insertNewCSV(course, year, sem, regulation, regOrSup, examMonth, examYear,
@@ -84,6 +84,7 @@ def insertNewCSV(course, year, sem, regulation, regOrSup, examMonth, examYear,
     con = sqlite3.connect('results.db')
     createResultsTable(tableName, con)
     insertResultsData(parseCSV(fileName), tableName, con)
+    insertMetadataValues(tableName, con)
 
     return parseTableName(tableName)
 

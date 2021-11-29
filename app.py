@@ -25,7 +25,7 @@ def home():
     con = sqlite3.connect('results.db')
     page = request.args.get('page', 1, type=int)
 
-    perPage = 14
+    perPage = 13
 
     totalResults = getResultsListCount(con)
     pages = ceil(totalResults / perPage)
@@ -41,8 +41,10 @@ def home():
 
 @app.route('/roll/<table>')
 def roll(table):
+    con = sqlite3.connect('results.db')
     bgImage = '/static/images/caps.jpg'
-    return render_template('roll.html', table=table, bgImage=bgImage)
+    tableName = parseTableName(getTableName(table, con))
+    return render_template('roll.html', table=table, tableName=tableName)
 
 
 @app.route('/results')
@@ -74,7 +76,7 @@ def results():
 
 @app.route('/error')
 def error():
-    return render_template('error.html'), 400
+    return render_template('error.html'), 404
 
 
 @app.route('/admin', methods=['GET', 'POST'])

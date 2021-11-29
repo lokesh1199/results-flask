@@ -48,3 +48,14 @@ def parseTableName(name):
     res = f'{course} {name[1]} Year {name[2]} Semester ({name[3]}) {exam} '
     res += f'Examinations, {name[5]} {name[6]}'
     return res
+
+
+def getNextIndexOfData(data: list, start=0):
+    index = start
+
+    while index < len(data):
+        if data[index][0].startswith('Name'):
+            break
+        index += 1
+
+    return index

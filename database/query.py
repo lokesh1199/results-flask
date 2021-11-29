@@ -40,7 +40,7 @@ def getMarks(con, rollno, tableName):
         result_status,
         credits,
         grades,
-        grade_points from {tableName} WHERE rollno = "{rollno}"'''
+        grade_points from {tableName} WHERE rollno="{rollno}"'''
 
     index = 1
     totalMarks = 0
