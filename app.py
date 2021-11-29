@@ -25,7 +25,7 @@ def home():
     con = sqlite3.connect('results.db')
     page = request.args.get('page', 1, type=int)
 
-    perPage = 17
+    perPage = 14
 
     totalResults = getResultsListCount(con)
     pages = ceil(totalResults / perPage)
