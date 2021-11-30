@@ -27,10 +27,8 @@ Results
             Examination Results Portal
         </p>
 
-        <p class="has-text-centered mb-4 is-underlined is-bold"
-            style="color: #000080;font-size: 1.5em; font-weight: bold;">{{
-            examName
-            }}
+        <p class="has-text-centered mb-4 is-underlined is-bold" style="font-size: 1.5em; font-weight: bold;">
+            <a href="{{ url_for('roll', table=table) }}" style="color: #000080;">{{ examName }}</a>
         </p>
         <div class="table-container">
             <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
