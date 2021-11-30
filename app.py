@@ -78,8 +78,8 @@ def results():
         return redirect('roll/' + table)
 
 
-@app.route('/error')
-def error():
+@app.errorhandler(404)
+def error(error):
     return render_template('error.html'), 404
 
 
