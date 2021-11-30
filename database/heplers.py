@@ -1,6 +1,3 @@
-import sqlite3
-
-
 def parseCSV(filename):
     with open(filename) as file:
         res = []

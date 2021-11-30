@@ -49,12 +49,13 @@ def roll(table):
 
 @app.route('/results')
 def results():
-    rollno = request.args.get('roll').strip().upper()
-    table = request.args.get('table').strip()
-
-    con = sqlite3.connect('results.db')
-
     try:
+        table = None
+        rollno = request.args.get('roll').strip().upper()
+        table = request.args.get('table').strip()
+
+        con = sqlite3.connect('results.db')
+
         if not checkRoll(rollno):
             raise Exception('Invalid rollno')
         tableName = getTableName(table, con)
@@ -67,10 +68,13 @@ def results():
             branch = examName.split()[0]
 
         return render_template('results.html', marks=marks, name=name,
-                               rollno=rollno, examName=examName, branch=branch)
+                               rollno=rollno, examName=examName, branch=branch,
+                               table=table)
     except:
         flash('Invalid Hall Ticket Number for the Exam you have selected.',
               'is-danger')
+        if table is None:
+            return redirect('home')
         return redirect('roll/' + table)
 
 
@@ -86,6 +90,7 @@ def admin():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        # TODO: Change this is production
         if username == 'admin' and password == 'admin123':
             session['admin'] = True
             return redirect(request.url)
@@ -190,8 +195,9 @@ def upload():
             file.save(fileName)
 
             try:
-                tableName = insertNewCSV(course, year, sem, regulation, regOrSup,
-                                         examMonth, examYear, fileName)
+                tableName = insertNewCSV(course, year, sem, regulation,
+                                         regOrSup, examMonth, examYear,
+                                         fileName)
                 flash(f'Successfully added {tableName} Results', 'is-success')
             except:
                 flash('Results File Already Exists', 'is-danger')
