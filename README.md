@@ -1,7 +1,7 @@
 # INSTALL
 
 ```
-git clone https://github.com/lokesh1199/marks-clg
+git clone https://github.com/lokesh1199/results-flask
 cd marks-clg
 python -m venv env
 source env/bin/activate
