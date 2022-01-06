@@ -18,10 +18,11 @@ def createResultsTable(tableName, con):
     con.commit()
 
 
-def createStudentTable(con):
-    createSQL = '''CREATE TABLE students (
+def createStudentsTable(tableName, con):
+    createSQL = f'''CREATE TABLE {tableName}_students (
         rollno text PRIMARY KEY,
-        name text
+        name text,
+        sgpa text
     )'''
 
     cur = con.cursor()
@@ -29,8 +30,8 @@ def createStudentTable(con):
     con.commit()
 
 
-def createSubjectTable(con):
-    createSQL = '''CREATE TABLE subjects (
+def createSubjectsTable(tableName, con):
+    createSQL = f'''CREATE TABLE {tableName}_subjects (
         subject_code text PRIMARY KEY,
         subject_name text
     )'''
@@ -44,7 +45,7 @@ def createMetadataTable(con):
     createSQL = '''CREATE TABLE metadata(
         sno integer PRIMARY KEY,
         date text,
-        name text
+        name text NOT NULL UNIQUE
     )'''
     cur = con.cursor()
     cur.execute(createSQL)
@@ -65,8 +66,8 @@ def createMetadataTable(con):
 def createAllTables():
     con = sqlite3.connect('results.db')
 
-    createStudentTable(con)
-    createSubjectTable(con)
+    # createStudentTable(con)
+    # createSubjectTable(con)
     createMetadataTable(con)
     # createBranchesTable(con)
 

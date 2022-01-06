@@ -5,29 +5,27 @@ from .heplers import parseTableName
 
 def getName(con, rollno, tableName):
     cur = con.cursor()
-    SQL = f'SELECT name FROM students WHERE rollno="{rollno}"'
+    # SQL = f'SELECT name FROM {tableName} WHERE rollno="{rollno}"'
+    SQL = f'SELECT name FROM {tableName}_students WHERE rollno="{rollno}"'
 
     cur.execute(SQL)
     return cur.fetchone()[0]
 
 
-def getSubjectName(con, subjectCode):
+def getSubjectName(con, subjectCode, tableName):
     cur = con.cursor()
-    SQL = f'''SELECT subject_name FROM subjects WHERE
+    SQL = f'''SELECT subject_name FROM {tableName}_subjects WHERE
             subject_code="{subjectCode}"'''
 
     cur.execute(SQL)
     return cur.fetchone()[0]
 
 
-def getSGPA(creditsList, grades):
-    res = 0
-    for i in range(len(creditsList)):
-        res += creditsList[i] * grades[i]
-    try:
-        return round(res/sum(creditsList), 2)
-    except:
-        return 0
+def getSGPA(con, rollno, tableName):
+    cur = con.cursor()
+    sql = f'SELECT sgpa FROM {tableName}_students WHERE rollno="{rollno}"'
+    cur.execute(sql)
+    return cur.fetchone()[0]
 
 
 def getMarks(con, rollno, tableName):
@@ -51,11 +49,14 @@ def getMarks(con, rollno, tableName):
     gradePoints = []
     for row in cur.execute(SQL):
         row = list(row)
-        row.insert(1, getSubjectName(con, row[0]))
+        row.insert(1, getSubjectName(con, row[0], tableName))
         creditsList.append(row[6])
         gradePoints.append(row[8])
 
-        totalMarks += row[4]
+        try:
+            totalMarks += row[4]
+        except:
+            pass
         totalCredits += row[6]
 
         row.insert(0, index)
@@ -66,7 +67,7 @@ def getMarks(con, rollno, tableName):
         'maxMarks': (index - 1) * 100,
         'totalMarks': totalMarks,
         'totalCredits': totalCredits,
-        'sgpa': getSGPA(creditsList, gradePoints)
+        'sgpa': getSGPA(con, rollno, tableName)
     }
     output.append(res)
 
@@ -137,8 +138,16 @@ def getBranchName(roll):
         '1A05': 'Computer Science and Engineering',
         '1A12': 'Information Technology',
         '1A33': 'Artificial Intelligence & Machine Learning',
-        '1A06': 'Data Science',
-        '1A07': 'Cyber Security',
+        '1A32': 'Data Science',
+        '1A35': 'IOT',
+        '1A36': 'Cyber Security',
+        '1D87': 'Advanced Manufacturing Systems',
+        '1D58': 'Computer Science and Engineering',
+        '1D82': 'Power Systems',
+        '1D57': 'VLSI Design',
+
+
+
     }
 
     branchCode = roll[4:8]

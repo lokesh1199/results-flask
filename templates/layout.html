@@ -34,6 +34,10 @@
     footer {
       box-shadow: black;
     }
+    
+    .printable-content-footer {
+        visibility: hidden;
+    }
 
     @media print {
       body * {
@@ -43,7 +47,17 @@
       .printable * {
         visibility: visible;
       }
-
+      
+      .printable-content {
+          visibility: visible;
+          color: black;
+      }
+        
+      .printable-content-footer {
+          visibility: visible;
+          color: black;
+      }
+      
       .printable {
         position: absolute;
         overflow: visible;
@@ -82,7 +96,7 @@
     {% block content %} {% endblock content %}
   </div>
   <footer class="py-4 is-size-7-mobile">
-    <div class="has-text-centered">
+    <div class="has-text-centered mb-3">
       <p>
         Results portal developed by <strong>V Lokesh</strong> and <strong>S Akhilesh</strong>
       </p>
@@ -91,6 +105,7 @@
         Powered by <strong>SVCE Exam Cell</strong>
       </p>
     </div>
+    <div class="has-text-centered py-1" style="background-color:#024980; color: white; font-weight:bold; height: 30px">@ SVCE - All Rights are Reserved</div>
   </footer>
 </body>
 
