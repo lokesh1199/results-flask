@@ -14,10 +14,10 @@ Results
     </div>
     <div class="has-text-centered is-size-6 is-size-7-mobile mb-2">
         <!-- <div class="has-text-centered " style="font-size:1.1em; font-weight: 900; font-family: CenturyGothic;"> -->
-        Approved by AICTE, Accredited by NAAC with 'A' Grade
-        <br>
-        Accredited by NBA (CSE, ECE, EEE, ME, CE & IT) & Permanently Affiliated to JNTUA.
-        <br>
+        <!--Approved by AICTE, Accredited by NAAC with 'A' Grade-->
+        <!--<br>-->
+        <!--Accredited by NBA (CSE, ECE, EEE, ME, CE & IT) & Permanently Affiliated to JNTUA.-->
+        <!--<br>-->
         Karakambadi Road, Tirupati-517507, Andhra Pradesh, INDIA.
         <!-- <hr> -->
     </div>
@@ -41,8 +41,13 @@ Results
                     <td>{{ rollno }}</td>
                 </tr>
                 <tr>
-                    <th>Branch</th>
-                    <td>{{ branch }}</td>
+                    {% if branch %}
+                        <th>Branch</th>
+                        <td>{{ branch }}</td>
+                    {% else %}
+                        <th>Course</th>
+                        <td>{{ examName.split()[0] }}</td>
+                    {% endif %}
                 </tr>
             </table>
         </div>
@@ -70,10 +75,10 @@ Results
                         {% endfor %}
                     </tr>
                     {% endfor %}
-                    <tr>
-                        <th colspan="2">Max Marks</th>
-                        <td colspan="9">{{ marks[-1]['maxMarks']}}</td>
-                    </tr>
+                    <!--<tr>-->
+                    <!--    <th colspan="2">Max Marks</th>-->
+                    <!--    <td colspan="9">{{ marks[-1]['maxMarks']}}</td>-->
+                    <!--</tr>-->
                     <tr>
                         <th colspan="2">Total Marks</th>
                         <td colspan="9">{{ marks[-1]['totalMarks']}}</td>
@@ -90,12 +95,14 @@ Results
             </table>
         </div>
     </div>
-</div>
-<div class="mt-6 mb-3 p-4 has-text-centered" style="border: 1px black solid;">
+    <div class="mt-6 mb-3 p-4 has-text-centered printable-content" style="border: 1px black solid;">
     Note: Any discrepancy in the result noted above must be bought to the notice of the controller of Examinations(UG),
     within
     two weeks from the above date
 </div>
+<div class="has-text-centered printable-content-footer " style="background-color:#024980; color: black; font-weight:bold; ">@ SVCE - All Rights are Reserved</div>
+</div>
+
 <div class="level-right mr-6">
     <button onclick="javascript:window.print()" class="button is-rounded color has-text-light">Print</button>
 </div>

@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime
 
-from .create import createResultsTable
+from .create import createResultsTable, createStudentsTable, createSubjectsTable
 from .heplers import (getNextIndexOfData, parseCSV, parseTableName,
                       stripEmptyCells)
 
@@ -13,8 +13,8 @@ def insertResultsValues(data, tableName, con):
     con.commit()
 
 
-def insertStudentValues(rollno, name, con):
-    insertSQL = f'INSERT INTO students values ("{rollno}", "{name}")'
+def insertStudentValues(tableName, rollno, name, sgpa, con):
+    insertSQL = f'INSERT INTO {tableName}_students values ("{rollno}", "{name}", "{sgpa}")'
 
     cur = con.cursor()
     try:
@@ -25,8 +25,8 @@ def insertStudentValues(rollno, name, con):
         pass
 
 
-def insertSubjectValues(subjectCode, subjectName, con):
-    insertSQL = f'''INSERT INTO subjects VALUES (
+def insertSubjectValues(tableName, subjectCode, subjectName, con):
+    insertSQL = f'''INSERT INTO {tableName}_subjects VALUES (
         "{subjectCode}", "{subjectName}")'''
 
     cur = con.cursor()
@@ -61,8 +61,6 @@ def insertResultsData(data: list, tableName, con):
         row = stripEmptyCells(data[index])
         name, rollno = row[1], row[3]
 
-        insertStudentValues(rollno, name, con)
-
         j = index + 2
         while data[j][0] != 'SGPA':
             subjects.add((data[j][0], data[j][1]))
@@ -71,24 +69,30 @@ def insertResultsData(data: list, tableName, con):
             insertResultsValues(row, tableName, con)
             j += 1
 
+        sgpa = stripEmptyCells(data[j])[-1]
+        insertStudentValues(tableName, rollno, name, sgpa, con)
+
         index = getNextIndexOfData(data, j)
 
     if len(subjects):
-        addSubjects(subjects, con)
+        addSubjects(tableName, subjects, con)
 
 
-def insertNewCSV(course, year, sem, regulation, regOrSup, examMonth, examYear,
-                 fileName):
-    tableName = f't_{course}_{year}_{sem}_{regulation}_{regOrSup}_{examMonth}_{examYear}'
+def insertNewCSV(tableName, fileName):
 
     con = sqlite3.connect('results.db')
-    createResultsTable(tableName, con)
-    insertResultsData(parseCSV(fileName), tableName, con)
+
     insertMetadataValues(tableName, con)
+
+    createResultsTable(tableName, con)
+    createStudentsTable(tableName, con)
+    createSubjectsTable(tableName, con)
+
+    insertResultsData(parseCSV(fileName), tableName, con)
 
     return parseTableName(tableName)
 
 
-def addSubjects(data, con):
+def addSubjects(tableName, data, con):
     for subjectCode, subjectName in data:
-        insertSubjectValues(subjectCode, subjectName, con)
+        insertSubjectValues(tableName, subjectCode, subjectName, con)
