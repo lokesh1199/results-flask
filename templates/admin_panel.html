@@ -8,11 +8,8 @@ Admin Panel
 <div class="navbar-menu">
   <div class="navbar-end">
     <div class="navbar-item">
-      <!-- TODO: change this url -->
-      <!-- <a href="/results/delete" class="button color has-text-light is-rounded mr-4">Delete</a> -->
-      <!-- <a href="/results/logout" class="button color has-text-light is-rounded">Logout</a> -->
-      <a href="/delete" class="button color has-text-light is-rounded mr-4">Delete</a>
-      <a href="/logout" class="button color has-text-light is-rounded">Logout</a>
+      <a href="/results/delete" class="button color has-text-light is-rounded mr-4">Delete</a>
+      <a href="/results/logout" class="button color has-text-light is-rounded">Logout</a>
     </div>
   </div>
 </div>
@@ -24,8 +21,7 @@ Admin Panel
     <div class="card px-0 py-4">
       <div class="card-content">
 
-        <!-- TODO: change this url -->
-        <form action="/upload" class="form" method="post" enctype="multipart/form-data">
+        <form action="/results/upload" class="form" method="post" enctype="multipart/form-data">
           <label class="label">Exam date:</label>
           <div class="select mr-3">
             <select name="examMonth" id="examMonth">

@@ -76,10 +76,8 @@ def results():
         flash('Invalid Hall Ticket Number for the Exam you have selected.',
               'is-danger')
         if table is None:
-            # TODO: change this url
-            return redirect('/home')
-        # TODO: change this url
-        return redirect('/roll/' + table)
+            return redirect('/results/home')
+        return redirect('/results/roll/' + table)
 
 
 @app.errorhandler(404)
@@ -142,8 +140,7 @@ def delete():
     con = sqlite3.connect('results.db')
 
     if not session.get('admin'):
-        # TODO: change this url
-        return redirect('/admin')
+        return redirect('/results/admin')
     elif not request.args.get('table'):
         page = request.args.get('page', 1, type=int)
 
@@ -169,15 +166,14 @@ def delete():
         except Exception as e:
             flash(str(e), 'is-danger')
         finally:
-            return redirect('/delete')
+            return redirect('/results/delete')
 
 
 @app.route('/logout')
 def logout():
     if session.get('admin'):
         session.pop('admin', None)
-        # TODO: change this url
-        return redirect('/admin')
+        return redirect('/results/admin')
     else:
         return redirect('/results')
 
@@ -185,8 +181,7 @@ def logout():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'GET' or not session.get('admin'):
-        # TODO: change this url
-        return redirect('/admin')
+        return redirect('/results/admin')
     else:
         examMonth = request.form.get('examMonth')
         examYear = request.form.get('examYear')
@@ -196,8 +191,7 @@ def upload():
         regulation = request.form.get('regulation').strip().upper()
         if not regulation.startswith('R'):
             flash('Regulation must starts with R', 'is-danger')
-        # TODO: change this url
-            return redirect('/admin')
+            return redirect('/results/admin')
 
         regOrSup = request.form.get('regOrSup')
 
@@ -222,8 +216,7 @@ def upload():
             finally:
                 remove(fileName)
 
-        # TODO: change this url
-        return redirect('/admin')
+        return redirect('/results/admin')
 
 
 # TODO: Remove this in production
@@ -233,4 +226,5 @@ def staticFiles(file):
 
 
 if __name__ == '__main__':
+    # TODO: remove debug in production
     app.run(debug=True)
